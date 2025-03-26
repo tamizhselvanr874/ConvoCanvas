@@ -1,7 +1,5 @@
 # ConvoCanvas
 
-# ConvoCanvas Documentation
-
 Welcome to **ConvoCanvas**! ConvoCanvas is your dedicated AI-powered assistant designed to generate stunning images through interactive conversations, image uploads, and a vast prompt library.
 
 ## ✨ Features
