@@ -1,0 +1,232 @@
+<!DOCTYPE html>  
+<html lang="en">  
+  <head>  
+    <meta charset="UTF-8" />  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />  
+    <title>ConvoCanvas</title>  
+  
+    <!-- Stylesheet for the application -->  
+    <link rel="stylesheet" href="styles.css" />  
+  
+    <!-- FontAwesome for icons -->  
+    <link  
+      rel="stylesheet"  
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"  
+    />  
+  
+    <!-- Google Fonts -->  
+    <link rel="preconnect" href="https://fonts.googleapis.com" />  
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />  
+    <link  
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap"  
+      rel="stylesheet"  
+    />  
+  </head>  
+  <body>  
+    <!-- New Session Button -->  
+    <button id="new-session-button" title="New Session">New Canvas</button>  
+  
+    <!-- Header Section -->  
+    <div class="chat-header">  
+      <h1>ConvoCanvas</h1>  
+    </div>  
+  
+    <!-- Info Button -->  
+    <button id="info-button" title="Info">  
+      <i class="fa-solid fa-info-circle"></i>  
+    </button>  
+  
+    <!-- Main Application Container -->  
+    <div class="app-container">  
+      <!-- Prompt Library Section -->  
+      <div class="prompt-library"></div>  
+  
+      <!-- Chat Interface Section -->  
+      <div class="chat-interface">  
+        <!-- Chat Window -->  
+        <div class="chat-window" id="chat-window"></div>  
+  
+        <!-- Recommendations Section -->  
+        <div  
+          class="recommendations"  
+          id="recommendations"  
+          style="display: none"  
+        ></div>  
+  
+        <!-- Input Area -->  
+        <div class="input-area">  
+          <!-- Dropdown Menu for Options -->  
+          <div class="checkbox-container">  
+            <div class="options-menu">  
+              <button id="options-menu-button" title="Options">  
+                <i class="fa-solid fa-ellipsis-vertical"></i>  
+              </button>  
+  
+              <!-- Dropdown Content for Checkboxes -->  
+              <div class="dropdown-content">  
+                <!-- Direct Image Generation (Quick Mode) -->  
+                <div  
+                  class="direct-generation-checkbox"  
+                  title="Direct Image Generation"  
+                >  
+                  <input type="checkbox" id="direct-image-generation" />  
+                  <label for="direct-image-generation"></label>  
+                  <span>Quick Mode</span>  
+                </div>  
+  
+                <!-- Recommendations Checkbox -->  
+                <div class="recommendation-checkbox" title="Recommendations">  
+                  <input type="checkbox" id="show-recommendations" />  
+                  <label for="show-recommendations"></label>  
+                  <span>Recommendations</span>  
+                </div>  
+              </div>  
+            </div>  
+          </div>  
+  
+          <!-- Image Upload Icon -->  
+          <label for="image-upload" class="image-upload-label">  
+            <input type="file" id="image-upload" accept="image/*" />  
+            <i class="fa-solid fa-paperclip"></i>  
+          </label>  
+  
+          <!-- User Input Field -->  
+          <input  
+            type="text"  
+            id="user-input"  
+            placeholder="Type your message..."  
+          />  
+  
+          <!-- Send Button -->  
+          <button id="send-button">  
+            <i class="fa-solid fa-paper-plane"></i>  
+          </button>  
+        </div>  
+      </div>  
+    </div>  
+  
+    <!-- Modal for Enlarged Image View -->  
+    <div  
+      id="image-modal"  
+      class="modal"  
+      style="  
+        display: none;  
+        position: fixed;  
+        z-index: 1000;  
+        left: 0;  
+        top: 0;  
+        width: 100%;  
+        height: 100%;  
+        overflow: auto;  
+        background-color: rgba(0, 0, 0, 0.9);  
+      "  
+    >  
+      <div  
+        class="modal-content"  
+        style="  
+          background-color: #333;  
+          margin: 15% auto;  
+          padding: 20px;  
+          border: 1px solid #888;  
+          width: 80%;  
+          color: white;  
+          text-align: center;  
+        "  
+      >  
+        <!-- Enlarged Image -->  
+        <img  
+          id="enlarged-img"  
+          style="max-width: 100%; height: auto; display: block; margin: 0 auto;"  
+        />  
+  
+        <!-- Modal Actions -->  
+        <div  
+          class="modal-actions"  
+          style="margin-top: 20px; display: flex; justify-content: center; gap: 20px;"  
+        >  
+          <!-- Download Button -->  
+          <a  
+            id="download-link"  
+            download="generated-image.jpg"  
+            style="  
+              background-color: #444;  
+              color: white;  
+              padding: 10px 20px;  
+              text-decoration: none;  
+              border: none;  
+              cursor: pointer;  
+              font-size: 16px;  
+              border-radius: 5px;  
+            "  
+            >Download</a  
+          >  
+  
+          <!-- Close Modal Button -->  
+          <button  
+            class="close"  
+            onclick="closeModal()"  
+            style="  
+              background-color: #444;  
+              color: white;  
+              padding: 10px 20px;  
+              text-decoration: none;  
+              border: none;  
+              cursor: pointer;  
+              font-size: 16px;  
+              border-radius: 5px;  
+            "  
+          >  
+            X  
+          </button>  
+        </div>  
+      </div>  
+    </div>  
+  
+    <!-- Info Modal -->  
+    <div id="info-modal" class="modal">  
+      <div class="modal-content">  
+        <h2>Welcome to ConvoCanvas</h2>  
+        <p>  
+          Hello! I am ConvoCanvas, your dedicated assistant here to provide you  
+          with a seamless and intuitive experience for generating stunning  
+          images. I have THREE important capabilities designed to help you on  
+          your creative journey:  
+        </p>  
+        <p>  
+          <strong>(a) Interactive Mode:</strong> I will converse with you to  
+          understand your requirements to ensure each image is crafted to  
+          perfection. Click on ":" to turn on Recommendations and let me guide  
+          you through the process in detail. If you do not want to go step by  
+          step, turn on the "Quick Mode" (Click on ":") and let me generate an  
+          image for you. Then, I can work with you to customize the image to  
+          your taste.  
+        </p>  
+        <p>  
+          <strong>(b) Image Upload:</strong> Unleash your creativity by  
+          uploading an image to me. Once uploaded, I will generate a detailed  
+          description of the image, allowing you to fine-tune it according to  
+          your preferences. The image upload capability is perfect if you wish  
+          to explore variations of an existing image or seek inspiration from  
+          your own prior creations.  
+        </p>  
+        <p>  
+          <strong>(c) Prompt Library:</strong> Access a diverse collection of  
+          existing prompts through my comprehensive Prompt Library. Whether  
+          you're a seasoned artist or a beginner, the library offers a wide  
+          range of prompts to suit various styles and themes. Explore the  
+          library to discover new ideas and techniques, and let your creativity  
+          flow as you experiment with different prompts to achieve the desired  
+          outcome.  
+        </p>  
+        <p>  
+          I invite you to explore my features and unleash your creativity.  
+          Enjoy the process of creating stunning images and let your imagination  
+          soar.  
+        </p>  
+      </div>  
+    </div>  
+  
+    <!-- JavaScript -->  
+    <script src="script.js"></script>  
+  </body>  
+</html>  
